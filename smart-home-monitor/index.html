@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Smart Home Monitor</h1>
+
+        <div class="table-container">
+            <h2>Temperature</h2>
+            <table>
+                <tr>
+                    <th>Current Temperature</th>
+                </tr>
+                <tr>
+                    <td id="temperature">Loading...</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h2>Humidity</h2>
+            <table>
+                <tr>
+                    <th>Current Humidity</th>
+                </tr>
+                <tr>
+                    <td id="humidity">Loading...</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="alert" class="alert" style="display: none;"></div>
+
+        <button id="refresh">Refresh Data</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

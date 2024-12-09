@@ -1,0 +1,96 @@
+/* Reset some default browser styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('background1.jpg'); /* Replace with a smart home related image */
+    
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.dashboard-container {
+    background-color: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background for contrast */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 1000px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #f7c700; /* Gold color for the title */
+}
+
+.table-container {
+    margin: 20px 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #f7c700; /* Gold color for headings */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    font-size: 18px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #4CAF50; /* Green header for tables */
+}
+
+td {
+    background-color: #333; /* Dark background for data cells */
+}
+
+.alert {
+    color: white;
+    font-weight: bold;
+    margin-top: 20px;
+    background-color: rgba(255, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
