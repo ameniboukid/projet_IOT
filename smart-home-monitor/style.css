@@ -3,12 +3,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    flex-wrap: wrap;
 }
 
 body {
     font-family: Arial, sans-serif;
     background-image: url('background1.jpg'); /* Replace with a smart home related image */
-    
     background-size: cover;
     background-position: center;
     color: white;

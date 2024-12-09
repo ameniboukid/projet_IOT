@@ -17,7 +17,7 @@
                     <th>Current Temperature</th>
                 </tr>
                 <tr>
-                    <td id="temperature">Loading...</td>
+                    <td id="temperature">--</td>
                 </tr>
             </table>
         </div>
@@ -29,16 +29,24 @@
                     <th>Current Humidity</th>
                 </tr>
                 <tr>
-                    <td id="humidity">Loading...</td>
+                    <td id="humidity">--</td>
                 </tr>
             </table>
         </div>
 
-        <div id="alert" class="alert" style="display: none;"></div>
+        <div id="alert" class="alert normal">Status: Normal</div>
 
         <button id="refresh">Refresh Data</button>
+
+        <div id="charts">
+            <h2>Temperature Chart</h2>
+            <canvas id="temperatureChart"></canvas>
+            <h2>Humidity Chart</h2>
+            <canvas id="humidityChart"></canvas>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

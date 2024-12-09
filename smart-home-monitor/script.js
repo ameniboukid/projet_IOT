@@ -1,51 +1,93 @@
-// API endpoint for Node-RED (replace with your actual endpoint)
-const apiUrl = 'http://localhost:1880/data';  // Replace with your Node-RED URL if different
+let temperatureChart, humidityChart;
 
-// DOM elements to display data
-const temperatureElem = document.getElementById('temperature');
-const humidityElem = document.getElementById('humidity');
-const alertElem = document.getElementById('alert');
-const refreshButton = document.getElementById('refresh');
-
-// Define the threshold values for temperature and humidity
-const temperatureThreshold = 30; // Temperature threshold in °C
-const humidityThreshold = 70; // Humidity threshold in %
-
-function fetchData() {
-    fetch(apiUrl)
-        .then(response => response.json()) // Parse JSON response
-        .then(data => {
-            const { temperature, humidity, alert } = data;
-
-            // Update the temperature and humidity tables
-            temperatureElem.innerHTML = `${temperature}°C`;
-            humidityElem.innerHTML = `${humidity}%`;
-
-            // Check if temperature exceeds the threshold
-            if (temperature > temperatureThreshold) {
-                alertElem.innerHTML = `Temperature Alert: ${temperature}°C exceeds the threshold of ${temperatureThreshold}°C!`;
-                alertElem.style.backgroundColor = 'rgba(255, 0, 0, 0.7)'; // Red background for temperature alert
-                alertElem.style.display = 'block';
+// Function to initialize or update the temperature chart
+function updateTemperatureChart(dataPoints) {
+    const ctx = document.getElementById('temperatureChart').getContext('2d');
+    if (!temperatureChart) {
+        temperatureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: dataPoints.length }, (_, i) => `Point ${i + 1}`),
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: dataPoints,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Data Points' } },
+                    y: { title: { display: true, text: 'Temperature (°C)' } }
+                }
             }
-            // Check if humidity exceeds the threshold
-            else if (humidity > humidityThreshold) {
-                alertElem.innerHTML = `Humidity Alert: ${humidity}% exceeds the threshold of ${humidityThreshold}%!`;
-                alertElem.style.backgroundColor = 'rgba(255, 165, 0, 0.7)'; // Orange background for humidity alert
-                alertElem.style.display = 'block';
-            }
-            // If neither exceeds threshold, hide the alert
-            else {
-                alertElem.style.display = 'none';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
         });
+    } else {
+        temperatureChart.data.labels = Array.from({ length: dataPoints.length }, (_, i) => `Point ${i + 1}`);
+        temperatureChart.data.datasets[0].data = dataPoints;
+        temperatureChart.update();
+    }
 }
 
-// Initial fetch when the page loads
-fetchData();
+// Function to initialize or update the humidity chart
+function updateHumidityChart(dataPoints) {
+    const ctx = document.getElementById('humidityChart').getContext('2d');
+    if (!humidityChart) {
+        humidityChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: dataPoints.length }, (_, i) => `Point ${i + 1}`),
+                datasets: [{
+                    label: 'Humidity (%)',
+                    data: dataPoints,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Data Points' } },
+                    y: { title: { display: true, text: 'Humidity (%)' } }
+                }
+            }
+        });
+    } else {
+        humidityChart.data.labels = Array.from({ length: dataPoints.length }, (_, i) => `Point ${i + 1}`);
+        humidityChart.data.datasets[0].data = dataPoints;
+        humidityChart.update();
+    }
+}
 
-// Event listener for the "Refresh Data" button
-refreshButton.addEventListener('click', fetchData);
+// Fetch and update charts dynamically
+function fetchDataFromThingSpeak() {
+    const url = 'https://api.thingspeak.com/channels/2779148/feeds.json?api_key=AHW40GI9NYR1ZPKJ&results=10';
 
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data. Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const temperatureData = data.feeds.map(feed => parseFloat(feed.field1)).filter(val => !isNaN(val));
+            const humidityData = data.feeds.map(feed => parseFloat(feed.field2)).filter(val => !isNaN(val));
+
+            document.getElementById('temperature').textContent = temperatureData[temperatureData.length - 1] || '--';
+            document.getElementById('humidity').textContent = humidityData[humidityData.length - 1] || '--';
+
+            updateTemperatureChart(temperatureData);
+            updateHumidityChart(humidityData);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+// Refresh button event
+document.getElementById('refresh').addEventListener('click', fetchDataFromThingSpeak);
+
+// Initial fetch
+fetchDataFromThingSpeak();
