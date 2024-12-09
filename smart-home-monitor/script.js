@@ -62,28 +62,39 @@ function updateHumidityChart(dataPoints) {
     }
 }
 
-// Fetch and update charts dynamically
+// Function to fetch data and update status
 function fetchDataFromThingSpeak() {
+    const alertDiv = document.getElementById('alert');
     const url = 'https://api.thingspeak.com/channels/2779148/feeds.json?api_key=AHW40GI9NYR1ZPKJ&results=10';
 
     fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch data. Status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            const temperatureData = data.feeds.map(feed => parseFloat(feed.field1)).filter(val => !isNaN(val));
-            const humidityData = data.feeds.map(feed => parseFloat(feed.field2)).filter(val => !isNaN(val));
+            const temperatureData = data.feeds.map(feed => parseFloat(feed.field1));
+            const humidityData = data.feeds.map(feed => parseFloat(feed.field2));
 
+            // Display the latest values
             document.getElementById('temperature').textContent = temperatureData[temperatureData.length - 1] || '--';
             document.getElementById('humidity').textContent = humidityData[humidityData.length - 1] || '--';
 
+            // Update the status dynamically
+            if (temperatureData[temperatureData.length - 1] > 30 || humidityData[humidityData.length - 1] > 70) {
+                alertDiv.textContent = 'Status: Alert - Check Temperature or Humidity!';
+                alertDiv.style.backgroundColor = 'red';
+            } else {
+                alertDiv.textContent = 'Status: Normal';
+                alertDiv.style.backgroundColor = 'green';
+            }
+
+            // Update the charts
             updateTemperatureChart(temperatureData);
             updateHumidityChart(humidityData);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            alertDiv.textContent = 'Status: Error Fetching Data';
+            alertDiv.style.backgroundColor = 'gray';
+        });
 }
 
 // Refresh button event

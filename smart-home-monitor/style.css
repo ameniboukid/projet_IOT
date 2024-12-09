@@ -70,14 +70,15 @@ td {
 }
 
 .alert {
-    color: white;
-    font-weight: bold;
-    margin-top: 20px;
-    background-color: rgba(255, 0, 0, 0.7);
+    display: block; /* Ensure the alert div is visible */
+    background-color: #4caf50; /* Green for normal status */
     padding: 10px;
+    color: white;
     border-radius: 5px;
-    display: none;
+    text-align: center;
+    font-weight: bold;
 }
+
 
 button {
     padding: 12px 25px;
